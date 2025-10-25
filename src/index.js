@@ -1,25 +1,21 @@
 //importando modulo http
 const http = require('http')
 
-//imporatacao dos mocks
-const users = require('../src/mocks/users')
+const routes = require('../src/routes')
 
 // funcao pra criar o servidor
 const server = http.createServer((req, res) => {
 
-    //console que ira mostrar dados da requisicao, nesse caso o método e dps o endpoint (/users, /carros)
-    console.log(`Request method: ${req.method} | Endpoint: ${req.url}`)
+    const route = routes.find((routeObj) => {
+        routeObj.endpoint === req.url && routeObj.method === req.method
+    })
 
-    if (req.url === '/users' && req.method === 'GET'){
-        res.writeHead(200, {'Content-Type': 'application/json'})
-        //o end sempre precisa retornar uma string, por isso usamos o stringfy
-        res.end(JSON.stringify(users))
-    } else {
-        //else do 404
+    if(route){
+        route.handler(req, res)
+    } else{
         res.writeHead(404, {'Content-Type': 'text/html'})
         res.end('<h1>404 - NOT FOUND</h1>')
     }
-
 
 })
 
