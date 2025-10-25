@@ -6,9 +6,9 @@ const routes = require('../src/routes')
 // funcao pra criar o servidor
 const server = http.createServer((req, res) => {
 
-    const route = routes.find((routeObj) => {
+    const route = routes.find((routeObj) => (
         routeObj.endpoint === req.url && routeObj.method === req.method
-    })
+    ))
 
     if(route){
         route.handler(req, res)
